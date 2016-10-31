@@ -200,7 +200,18 @@
         console.error('Unknown responseText:', context.responseText);
       case 'text':
       case '':
+        var type = context.responseType || context._responseType;
         var response = utf8Decode(buffer);
+
+         if (type === 'json') {
+           try {
+             response = JSON.parse(response);
+           }
+           catch (_) {
+             console.debug('Not a valid JSON response', response);
+           }
+         }
+        
         context.__set('responseText', response);
         context.__set('response', response);
         break;
@@ -212,6 +223,7 @@
 
     context.__fireEvent('Event', 'readystatechange');
     context.__fireEvent('UIEvent', 'load');
+    context.__fireEvent('UIEvent', 'loadend');
   }
 
   function handleXHRError(id, errorMessage) {
@@ -228,6 +240,7 @@
 
     context.__fireEvent('Event', 'readystatechange');
     context.__fireEvent('UIEvent', 'error');
+    context.__fireEvent('UIEvent', 'loadend');
   }
 
   window.handleXHRResponse = handleXHRResponse;
