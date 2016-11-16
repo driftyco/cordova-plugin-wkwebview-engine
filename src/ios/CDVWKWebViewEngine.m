@@ -439,13 +439,13 @@
     }
 
     NSURL *base = [self xhrBaseURL];
-	NSURL *final = nil;
-	if ([relativePath hasPrefix:@"file://"]) {
-		final = [[NSURL URLWithString:relativePath] standardizedURL];
-	}
-	else {
-		final = [[base URLByAppendingPathComponent:relativePath] standardizedURL];
-	}
+    NSURL *final = nil;
+    if ([relativePath hasPrefix:@"file://"]) {
+        final = [[NSURL URLWithString:relativePath] standardizedURL];
+    }
+    else {
+        final = [[base URLByAppendingPathComponent:relativePath] standardizedURL];
+    }
 
     // Security sensitive
     // Ensure URL does not leave the base URL
