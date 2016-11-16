@@ -76,7 +76,8 @@
 
 
   XHRPrototype.open = function _wk_open(method, url, async) {
-    if (!(/^[a-zA-Z0-9]+:\/\//.test(url))) {
+    // capture URL's that either start with "file://" or don't have a protocol
+    if (/^file:\/\//.test(url) || !(/^[a-zA-Z0-9]+:\/\//.test(url))) {
       console.debug("XHR polyfill: open() intercepted XHR:", url);
       this.__setURL(url);
       this.__set('readyState', 1); // OPENED
