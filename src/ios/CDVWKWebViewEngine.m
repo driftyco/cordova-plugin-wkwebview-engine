@@ -29,10 +29,14 @@
 #define CDV_WKWEBVIEW_FILE_URL_LOAD_SELECTOR @"loadFileURL:allowingReadAccessToURL:"
 
 @interface CDVWKWebViewEngine ()
+{
+	NSURL *appDataHome;
+}
 
 @property (nonatomic, strong, readwrite) NSOperationQueue* fileQueue;
 @property (nonatomic, strong, readwrite) UIView* engineWebView;
 @property (nonatomic, strong, readwrite) id <WKUIDelegate> uiDelegate;
+@property (nonatomic, assign) BOOL allowFilesFromAppHome;
 
 @end
 
@@ -97,6 +101,7 @@
         NSLog(@"CDVWKWebViewEngine: skipped XHR polyfill");
     }
 
+	self.allowFilesFromAppHome = [settings cordovaBoolSettingForKey:@"AllowFilesFromAppHome" defaultValue:YES];
 
     WKWebViewConfiguration* configuration = [self createConfigurationFromSettings:settings];
     configuration.userContentController = userContentController;
@@ -238,6 +243,11 @@
             }
         }
     }
+	
+	NSURL *baseDir = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
+	appDataHome = [baseDir URLByDeletingLastPathComponent];
+
+   	self.allowFilesFromAppHome = [settings cordovaBoolSettingForKey:@"AllowFilesFromAppHome" defaultValue:YES];
 
     wkWebView.scrollView.scrollEnabled = [settings cordovaFloatSettingForKey:@"ScrollEnabled" defaultValue:YES];
 
@@ -439,11 +449,19 @@
     }
 
     NSURL *base = [self xhrBaseURL];
-    NSURL *final = [[base URLByAppendingPathComponent:relativePath] standardizedURL];
+    NSURL *final = nil;
+    if ([relativePath hasPrefix:@"file://"]) {
+        final = [[NSURL URLWithString:relativePath] standardizedURL];
+    }
+    else {
+        final = [[base URLByAppendingPathComponent:relativePath] standardizedURL];
+    }
 
     // Security sensitive
     // Ensure URL does not leave the base URL
-    if (![[final absoluteString] hasPrefix:[base absoluteString]]) {
+    if (![[final absoluteString] hasPrefix:[base absoluteString]] &&
+		(!self.allowFilesFromAppHome || ![[final absoluteString] hasPrefix:appDataHome.absoluteString]))
+	{
         NSLog(@"CDVWKWebViewEngine: requested path can not be accessed: %@", final);
         return nil;
     }

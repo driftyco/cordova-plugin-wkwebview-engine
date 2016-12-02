@@ -80,7 +80,8 @@
 
 
   XHRPrototype.open = function _wk_open(method, url, async) {
-    if (!(/^[a-zA-Z0-9]+:\/\//.test(url))) {
+    // capture URL's that either start with "file://" or don't have a protocol
+    if (/^file:\/\//.test(url) || !(/^[a-zA-Z0-9]+:\/\//.test(url))) {
       console.debug("XHR polyfill: open() intercepted XHR:", url);
       this.__setURL(url);
       this.__set('readyState', 1); // OPENED
@@ -173,12 +174,15 @@
     }
     console.debug("XHR polyfill: Response received: ", context.__getURL());
     var buffer = decodeBase64(base64);
-    switch (context.responseText) {
+    switch (context.responseType) {
       case 'arraybuffer':
         context.__set('response', buffer);
         break;
+      case 'blob':
+        context.__set('response', new Blob([buffer]));
+        break;
       default:
-        console.error('Unknown responseText:', context.responseText);
+        console.error('Unknown responseType:', context.responseType);
       case 'text':
       case '':
         var response = utf8Decode(buffer);
