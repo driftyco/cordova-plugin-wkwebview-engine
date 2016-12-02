@@ -206,12 +206,15 @@
     }
     console.debug("XHR polyfill: Response received: ", context.__getURL());
     var buffer = decodeBase64(base64);
-    switch (context.responseText) {
+    switch (context.responseType) {
       case 'arraybuffer':
         context.__set('response', buffer);
         break;
+      case 'blob':
+        context.__set('response', new Blob([buffer]));
+        break;
       default:
-        console.error('Unknown responseText:', context.responseText);
+        console.error('Unknown responseType:', context.responseType);
       case 'text':
       case '':
         var response = utf8Decode(buffer);
