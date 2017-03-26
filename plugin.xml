@@ -58,6 +58,7 @@
         <header-file src="src/ios/CDVWKProcessPoolFactory.h" />
         <source-file src="src/ios/CDVWKProcessPoolFactory.m" />
         <asset src="src/ios/wk-plugin.js" target="wk-plugin.js" />
+        <asset src="src/ios/wk-xhr.js" target="wk-xhr.js" />
 
         <!--GCDWebServer headers-->
         <header-file src="src/ios/GCDWebServer/Core/GCDWebServer.h" />
@@ -91,8 +92,31 @@
         <source-file src="src/ios/GCDWebServer/Responses/GCDWebServerFileResponse.m" />
         <source-file src="src/ios/GCDWebServer/Responses/GCDWebServerStreamedResponse.m" />
 
+        <header-file src="src/ios/AFNetworking/AFHTTPSessionManager.h" />
+        <source-file src="src/ios/AFNetworking/AFHTTPSessionManager.m" />
+
+        <header-file src="src/ios/AFNetworking/AFNetworking.h" />
+
+        <header-file src="src/ios/AFNetworking/AFNetworkReachabilityManager.h" />
+        <source-file src="src/ios/AFNetworking/AFNetworkReachabilityManager.m" />
+
+        <header-file src="src/ios/AFNetworking/AFSecurityPolicy.h" />
+        <source-file src="src/ios/AFNetworking/AFSecurityPolicy.m" />
+
+        <header-file src="src/ios/AFNetworking/AFURLRequestSerialization.h" />
+        <source-file src="src/ios/AFNetworking/AFURLRequestSerialization.m" />
+
+        <header-file src="src/ios/AFNetworking/AFURLResponseSerialization.h" />
+        <source-file src="src/ios/AFNetworking/AFURLResponseSerialization.m" />
+
+        <header-file src="src/ios/AFNetworking/AFURLSessionManager.h" />
+        <source-file src="src/ios/AFNetworking/AFURLSessionManager.m" />
+
+
         <!--GCDWebServer dependencies-->
         <framework src="libz.tbd" />
+        <framework src="Security.framework" />
+        <framework src="SystemConfiguration.framework" />
 
     </platform>
 </plugin>
