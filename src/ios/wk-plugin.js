@@ -7,6 +7,8 @@
 
   // Initialize Ionic
   window.Ionic = window.Ionic || {};
+  // This plugin resizes the webview
+  window.Ionic.KeyboardResizes = true;
 
   function normalizeURL(url) {
     if (!url) {
