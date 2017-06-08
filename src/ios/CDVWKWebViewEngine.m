@@ -491,6 +491,16 @@ static void * KVOContext = &KVOContext;
 
 - (void)webView:(WKWebView*)theWebView didFailNavigation:(WKNavigation*)navigation withError:(NSError*)error
 {
+    [self handleNavigationError:theWebView error: error];
+}
+
+- (void)webView:(WKWebView*)theWebView didFailProvisionalNavigation:(WKNavigation*)navigation withError:(NSError*)error
+{
+    [self handleNavigationError:theWebView error: error];
+}
+
+- (void)handleNavigationError:(WKWebView*)theWebView error:(NSError*)error
+{
     CDVViewController* vc = (CDVViewController*)self.viewController;
     [CDVUserAgentUtil releaseLock:vc.userAgentLockToken];
 
