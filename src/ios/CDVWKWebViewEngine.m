@@ -60,7 +60,7 @@
 {
     self = [super init];
     if (self) {
-        if (NSClassFromString(@"WKWebView") == nil) {
+        if (NSClassFromString(@"WKWebView") == nil || !IsAtLeastiOSVersion(@"9.0")) {
             return nil;
         }
         self.frame = frame;
