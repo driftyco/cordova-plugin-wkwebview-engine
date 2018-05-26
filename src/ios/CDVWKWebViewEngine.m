@@ -31,6 +31,14 @@
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
 
+//Disabling bounce effect on every div (fixes bounce glitch)
+@implementation UIScrollView (NoBounce)
+- (void)didMoveToWindow {
+   [super didMoveToWindow];
+   self.bounces = NO;
+}
+@end
+
 @implementation UIScrollView (BugIOS11)
 
 + (void)load {
